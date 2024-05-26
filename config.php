@@ -1,0 +1,21 @@
+<?php
+// Replace with your bot token
+$botToken = "7130803239:AAH9ufIclF1vBJ4QcYg04hF4w8J0EnNRfug";
+
+// API URL for Telegram bot
+$apiUrl = "https://api.telegram.org/bot$botToken/";
+
+// Database connection parameters
+$servername = "localhost";
+$username = "koha_library";
+$password = "!|I-pXV#=mN74GS#";
+$dbname = "koha_library";
+
+// Create connection
+$conn = new mysqli($servername, $username, $password, $dbname);
+
+// Check connection
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
+?>
