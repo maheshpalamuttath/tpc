@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Telegram Patron Connect</title>
+
+    <!-- Add Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+    <style>
+        .warning-text {
+            color: red;
+        }
+
+        .loading-circle {
+            display: none; /* Initially hide the loading circle */
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <h1 class="mt-4 mb-4 text-center">Telegram Patron Connect</h1>
+        <p class="text-center">Welcome to Telegram Patron Connect! Streamline your messages, connect with patrons, and manage communications efficiently.</p>
+
+        <form id="telegramForm" action="process.php" method="post" enctype="multipart/form-data">
+            <div class="form-group">
+                <label for="file">Upload Image or PDF File (Optional):</label>
+                <input type="file" class="form-control" name="file" id="file" accept=".jpg, .jpeg, .png, .pdf">
+            </div>
+
+            <div class="form-group">
+                <label for="description">Description:</label>
+                <textarea class="form-control" name="description" id="description" rows="4" required></textarea>
+                <!-- Updated paragraph with the warning-text class -->
+                <p class="warning-text">
+                    Caution: Once sent, a message cannot be retracted; write and deliver carefully.
+                </p>
+                <hr>
+            </div>
+
+            <div class="form-group">
+                <label for="branch_code">Select Library:</label>
+                <select class="form-control" name="branch_code" id="branch_code" required>
+                    <option value="">Select Library</option>
+                    <option value="MAIN">Fr. Francis Sales Library</option>
+                    <option value="EC">East Campus Library</option>
+                    <!-- Add more options for other libraries if needed -->
+                </select>
+            </div>
+
+            <div class="form-group text-center">
+                <button type="submit" class="btn btn-primary" id="submitBtn">Send Message</button>
+                <div class="loading-circle mt-3">
+                    <div class="spinner-border text-primary" role="status">
+                        <span class="sr-only">Loading...</span>
+                    </div>
+                    <p class="mt-2">Messages are being sent...</p>
+                </div>
+            </div>
+        </form>
+        <footer class="text-center mt-4">
+            &copy; <script>document.write(new Date().getFullYear())</script>
+            <a href="#/" target="_blank" class="footer_lnk">Telegram Patron Connect</a>. All Rights Reserved.<br>
+            Developed by <a href="https://maheshpalamuttath.info/" target="_blank" class="footer_lnk" rel="noopener">Mahesh Palamuttath</a>
+        </footer>
+
+    </div>
+
+    <!-- Add Bootstrap JS and Popper.js -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            $('#telegramForm').submit(function () {
+                // Hide submit button and show loading circle
+                $('#submitBtn').hide();
+                $('.loading-circle').show();
+            });
+        });
+    </script>
+</body>
+
+</html>
