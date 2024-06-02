@@ -11,6 +11,9 @@ $username = "koha_library";
 $password = "!|I-pXV#=mN74GS#";
 $dbname = "koha_library";
 
+// Group invite link
+$groupInviteLink = 'https://t.me/+Lxybu-nsf8g4MjE1';
+
 // Create connection
 $conn = new mysqli($servername, $username, $password, $dbname);
 
