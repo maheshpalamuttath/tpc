@@ -57,7 +57,8 @@ function sendMessage($apiUrl, $chat_id, $message) {
 }
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $group_chat_id = "-1002220564841"; // Replace with your Telegram group chat ID
+    // Use the group_chat_id from config.php
+    global $group_chat_id;
 
     // Handle file upload if there's a file
     $file_path = '';
