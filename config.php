@@ -14,6 +14,9 @@ $dbname = "koha_library";
 // Group invite link
 $groupInviteLink = 'https://t.me/+Lxybu-nsf8g4MjE1';
 
+// Telegram group chat ID
+$group_chat_id = "-1002220564841";
+
 // Create connection
 $conn = new mysqli($servername, $username, $password, $dbname);
 
