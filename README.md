@@ -79,7 +79,7 @@ cloudflared tunnel run mytunnel
 
 ### 8. Set Up the Webhook with Telegram
 
-Register the webhook URL with Telegram using the hostname you configured. Replace `<YourBotToken>` with your Telegram bot token and `example.com` with your domain name.
+Register the webhook URL with Telegram using the hostname you configured. Replace `<YourBotToken>` with your Telegram bot token and `gems-tpc.opensio.co.in` with your domain name.
 
 ```bash
 curl -F "url=https://gems-tpc.opensio.co.in/bot.php" https://api.telegram.org/bot<YourBotToken>/setWebhook
