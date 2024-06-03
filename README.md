@@ -41,7 +41,7 @@ cloudflared tunnel create mytunnel
 cloudflared tunnel route dns mytunnel gems-tpc.opensio.co.in
 ```
 
-Replace `example.com` with your own domain name.
+Replace `gems-tpc.opensio.co.in` with your own domain name.
 
 ### 5. Configure Cloudflared
 
