@@ -16,7 +16,7 @@ Before you begin, ensure you have the following:
 
 ```bash
 sudo apt update && sudo apt upgrade -y
-sudo apt install -y curl lsb-release
+sudo apt install -y curl lsb-release php libapache2-mod-php php-{bcmath,bz2,intl,gd,mbstring,mysql,zip,cli,fpm,opcache,xml,curl,intl,xsl,soap,json,apcu,imap,xmlrpc}
 ```
 
 ### 2. Install Cloudflared
