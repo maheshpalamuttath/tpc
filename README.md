@@ -1,113 +1,96 @@
-## How to Set Up a Telegram Bot Webhook Using Cloudflare Tunnel
+# Telegram Bot Webhook Setup Using Cloudflare Tunnel
 
-Setting up a Telegram bot webhook usually involves exposing your server to the internet, which traditionally requires a domain name and a static IP address. However, with Cloudflare Tunnel (formerly known as Argo Tunnel), you can securely expose your local server to the internet without needing a static IP or domain name. This blog post will guide you through the process of setting up a Telegram bot webhook using Cloudflare Tunnel.
+This guide provides step-by-step instructions on setting up a Telegram bot webhook using Cloudflare Tunnel. By following these steps, you can securely expose your local server to the internet without the need for a static IP address or domain name.
 
-### Prerequisites
+## Prerequisites
 
-Before we start, make sure you have the following:
-1. A Cloudflare account.
-2. Cloudflare Tunnel installed on your server.
-3. Telegram bot token (you can create a bot using the [BotFather](https://core.telegram.org/bots#botfather)).
+Before you begin, ensure you have the following:
 
-### Step-by-Step Guide
+- A Cloudflare account.
+- Cloudflare Tunnel installed on your server.
+- Telegram bot token (you can create a bot using the BotFather).
 
-#### 1. Install Cloudflare Tunnel
+## Step-by-Step Guide
 
-First, you need to install Cloudflare Tunnel on your server. Depending on your operating system, follow the installation instructions provided by Cloudflare [here](https://developers.cloudflare.com/cloudflare-one/connections/connect-apps/install-and-setup/installation).
-
-For example, on a Unix-based system, you might run:
+### 1. Update and Install Dependencies
 
 ```bash
-sudo apt install cloudflared
+sudo apt update && sudo apt upgrade -y
+sudo apt install -y curl lsb-release
 ```
 
-#### 2. Authenticate Cloudflare Tunnel
-
-Authenticate your Cloudflare Tunnel client with your Cloudflare account by running:
+### 2. Install Cloudflared
 
 ```bash
-cloudflared login
+curl -L https://pkg.cloudflare.com/cloudflare-main.gpg | sudo tee /usr/share/keyrings/cloudflare-archive-keyring.gpg >/dev/null
+echo "deb [signed-by=/usr/share/keyrings/cloudflare-archive-keyring.gpg] https://pkg.cloudflare.com/cloudflared $(lsb_release -cs) main" | sudo tee  /etc/apt/sources.list.d/cloudflared.list
+sudo apt update
+sudo apt install -y cloudflared
 ```
 
-This command will open a browser window prompting you to log in to your Cloudflare account and select the domain you want to use.
-
-#### 3. Create a Tunnel
-
-Create a new tunnel with a name of your choice:
+### 3. Log in and Create a Tunnel
 
 ```bash
-cloudflared tunnel create my-tunnel
+cloudflared tunnel login
+cloudflared tunnel create mytunnel
 ```
 
-This command will generate a tunnel ID and create a configuration file for your tunnel.
+### 4. Route the Tunnel to a Domain Name
 
-#### 4. Configure the Tunnel
+```bash
+cloudflared tunnel route dns mytunnel gems-tpc.opensio.co.in
+```
 
-Next, configure your tunnel by creating or editing the configuration file, typically located at `~/.cloudflared/config.yml`:
+Replace `example.com` with your own domain name.
+
+### 5. Configure Cloudflared
+
+Create a YAML configuration file:
+
+```bash
+sudo nano ~/.cloudflared/config.yml
+```
+
+Replace `XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX` with your tunnel ID and `XXXXXXXXX.json` with your credentials file.
 
 ```yaml
-tunnel: my-tunnel-id
-credentials-file: /root/.cloudflared/my-tunnel-id.json
+tunnel: XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+credentials-file: /home/mahesh/.cloudflared/XXXXXXXXX.json
 
 ingress:
-  - hostname: webhook.example.com
+  - hostname: gems-tpc.opensio.co.in
     service: http://localhost:3000
   - service: http_status:404
 ```
 
-Replace:
-- `my-tunnel-id` with your actual tunnel ID.
-- `webhook.example.com` with your desired subdomain and domain.
-- `localhost:3000` with the port number where your bot's internal server is running.
-
-#### 5. Start the Tunnel
-
-Start the Cloudflare Tunnel by running:
+### 6. Install Cloudflared Service
 
 ```bash
-cloudflared tunnel run my-tunnel
+sudo cloudflared --config ~/.cloudflared/config.yml service install
+sudo systemctl enable cloudflared
+sudo systemctl start cloudflared
 ```
 
-This command will establish a secure tunnel between Cloudflare and your local server, making it accessible on the internet.
-
-#### 6. Set Up the Webhook with Telegram
-
-Finally, register the webhook URL with Telegram using the hostname you configured. Use the following command:
+### 7. Run the Tunnel
 
 ```bash
-curl -F "url=https://webhook.example.com/webhook" https://api.telegram.org/bot<YourBotToken>/setWebhook
+cloudflared tunnel run mytunnel
 ```
 
-Replace `webhook.example.com` with your actual subdomain and domain, and `<YourBotToken>` with your Telegram bot token.
+### 8. Set Up the Webhook with Telegram
 
-### Example Configuration
-
-Assume you have a domain `example.com`, want to use the subdomain `webhook`, and your bot's server is running on port `3000`. Your configuration file `~/.cloudflared/config.yml` should look like this:
-
-```yaml
-tunnel: my-tunnel-id
-credentials-file: /root/.cloudflared/my-tunnel-id.json
-
-ingress:
-  - hostname: webhook.example.com
-    service: http://localhost:3000
-  - service: http_status:404
-```
-
-Start the tunnel with:
+Register the webhook URL with Telegram using the hostname you configured. Replace `<YourBotToken>` with your Telegram bot token and `example.com` with your domain name.
 
 ```bash
-cloudflared tunnel run my-tunnel
+curl -F "url=https://gems-tpc.opensio.co.in/bot.php" https://api.telegram.org/bot<YourBotToken>/setWebhook
 ```
 
-Set the webhook URL with Telegram:
+## Conclusion
 
-```bash
-curl -F "url=https://webhook.example.com/webhook" https://api.telegram.org/bot<YourBotToken>/setWebhook
-```
+Following these steps, you've successfully set up a Telegram bot webhook using Cloudflare Tunnel. Your local server is now accessible on the internet securely.
 
-### Conclusion
+For more information, refer to the [Cloudflare Tunnel documentation](https://developers.cloudflare.com/cloudflare-one/connections/connect-apps).
 
-Using Cloudflare Tunnel to expose your Telegram bot webhook is a secure and straightforward method that avoids the complexity of managing a static IP or domain name. With this setup, you can leverage Cloudflare's robust infrastructure to ensure reliable and secure communication for your Telegram bot.
+---
 
-Feel free to share your experiences or any questions in the comments below!
+Feel free to customize and add more details as needed for your specific project.
